@@ -59,7 +59,7 @@ jobs:
         run: dotnet restore ./StarmyKnife.sln --runtime win-x64
 
       - name: Build solution
-        run: dotnet build ./StarmyKnife.sln --runtime win-x64 --configuration Release --no-restore
+        run: dotnet build ./StarmyKnife.sln --configuration Release --no-restore
 
       - name: Publish standalone (self-contained) package
         run: |
