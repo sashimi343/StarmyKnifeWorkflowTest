@@ -61,6 +61,9 @@ jobs:
             --runtime win-x64 `
             --self-contained true `
             --no-build
+          Write-Host "===== Publish folder files ====="
+          Get-ChildItem -Path ./src/StarmyKnife/bin/Release/net8.0-windows/publish -Recurse | Format-List Name,FullName,Length
+
 
       - name: Create ZIP (standalone package)
         run: |
