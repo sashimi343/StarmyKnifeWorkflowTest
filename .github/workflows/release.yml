@@ -45,7 +45,7 @@ jobs:
         shell: pwsh
 
       - name: Restore dependencies
-        run: dotnet restore ./StarmyKnife.sln
+        run: dotnet restore ./StarmyKnife.sln --runtime win-x64
 
       - name: Build solution
         run: dotnet build ./StarmyKnife.sln --configuration Release --no-restore
@@ -54,6 +54,7 @@ jobs:
         run: |
           dotnet publish .\src\StarmyKnife\StarmyKnife.csproj `
             /p:PublishProfile=.\src\StarmyKnife\Properties\PublishProfiles\win-x64.pubxml `
+            --runtime win-x64 `
             --no-build
 
       - name: Create ZIP (Standalone package)
@@ -66,6 +67,7 @@ jobs:
         run: |
           dotnet publish ./src/StarmyKnife/StarmyKnife.csproj `
             /p:PublishProfile=Properties\PublishProfiles\net80.pubxml `
+            --runtime win-x64 `
             --no-build
 
       - name: Create ZIP (Framework-dependent package)
