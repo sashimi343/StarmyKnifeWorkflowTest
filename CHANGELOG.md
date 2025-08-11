@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 
 ## [Unreleased]
 
+## [1.0.0.1] - 2025-08-11
+
+### Fixed
+
+* Fixed an error in the regular expression to extract CHANGELOG.md in release.yml
+
 ## [1.0.0.0] - 2025-08-11
 
 ### Added

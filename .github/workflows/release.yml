@@ -30,8 +30,9 @@ jobs:
         id: changelog
         run: |
           $version = "${{ steps.get_version.outputs.version }}"
+          $escapedVersion = [regex]::Escape($version)
           $content = Get-Content CHANGELOG.md -Raw
-          if ($content -match "(?ms)^## \[\Q$version\E\]\s*-\s*\d{4}-\d{2}-\d{2}\s*(.*?)(?=^## |\z)") {
+          if ($content -match "(?ms)^## \[$escapedVersion\][^\n]*\n\s*(.*?)(?=^## |\z)") {
             $changes = $matches[1].Trim()
             echo "changes<<EOF" >> $env:GITHUB_OUTPUT
             echo "$changes" >> $env:GITHUB_OUTPUT
