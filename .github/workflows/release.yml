@@ -59,8 +59,8 @@ jobs:
 
       - name: Create ZIP (Standalone package)
         run: |
-          $zipName = "StarmyKnife-standalone-${{ steps.get_version.outputs.version }}.zip"
-          Compress-Archive -Path "src\StarmyKnife\bin\Release\net8.0-windows\publish\StarmyKnife-standalone-x.x.x.x\*" -DestinationPath $zipName
+          $zipName = "StarmyKnife-standalone-x64-${{ steps.get_version.outputs.version }}.zip"
+          Compress-Archive -Path "src\StarmyKnife\bin\Release\net8.0-windows\publish\StarmyKnife-standalone-x64-x.x.x.x\*" -DestinationPath $zipName
         shell: pwsh
 
       - name: Publish Framework-dependent package
