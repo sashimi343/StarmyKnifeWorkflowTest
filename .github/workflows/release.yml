@@ -54,14 +54,15 @@ jobs:
       - name: Build solution
         run: dotnet build ./StarmyKnife.sln --configuration Release --no-restore
 
-      - name: Publish Self-contained package
+      - name: Publish standalone (self-contained) package
         run: |
           dotnet publish .\src\StarmyKnife\StarmyKnife.csproj `
             /p:PublishProfile=.\src\StarmyKnife\Properties\PublishProfiles\win-x64.pubxml `
             --runtime win-x64 `
+            --self-contained true `
             --no-build
 
-      - name: Create ZIP (Standalone package)
+      - name: Create ZIP (standalone package)
         run: |
           $zipName = "StarmyKnife-standalone-x64-${{ steps.get_version.outputs.version }}.zip"
           Compress-Archive -Path "src\StarmyKnife\bin\Release\net8.0-windows\publish\StarmyKnife-standalone-x64-x.x.x.x\*" -DestinationPath $zipName
@@ -83,8 +84,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changes }}
           files: |
-            StarmyKnife-Standalone-x64-${{ steps.get_version.outputs.version }}.zip
+            StarmyKnife-standalone-x64-${{ steps.get_version.outputs.version }}.zip
             StarmyKnife-${{ steps.get_version.outputs.version }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
