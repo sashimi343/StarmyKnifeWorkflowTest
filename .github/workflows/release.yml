@@ -47,23 +47,31 @@ jobs:
             echo "EOF" >> $env:GITHUB_OUTPUT
           }
         shell: pwsh
+        
+      # Add MsBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v1.3.1
+
+      - name: Clean solution
+        run: dotnet clean ./StarmyKnife.sln
 
       - name: Restore dependencies
         run: dotnet restore ./StarmyKnife.sln --runtime win-x64
 
       - name: Build solution
-        run: dotnet build ./StarmyKnife.sln --configuration Release --no-restore
+        run: dotnet build ./StarmyKnife.sln --runtime win-x64 --configuration Release --no-restore
 
       - name: Publish standalone (self-contained) package
         run: |
           dotnet publish .\src\StarmyKnife\StarmyKnife.csproj `
-            /p:PublishProfile=.\src\StarmyKnife\Properties\PublishProfiles\win-x64.pubxml `
+            --configuration Release `
             --runtime win-x64 `
             --self-contained true `
-            --no-build
-          Write-Host "===== Publish folder files ====="
-          Get-ChildItem -Path ./src/StarmyKnife/bin/Release/net8.0-windows/publish -Recurse | Format-List Name,FullName,Length
-
+            -p:PublishSingleFile=true `
+            -p:PublishReadyToRun=false `
+            -p:PublishTrimmed=false `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o .\src\StarmyKnife\bin\Release\net8.0-windows\publish\StarmyKnife-standalone-x64-x.x.x.x
 
       - name: Create ZIP (standalone package)
         run: |
@@ -74,9 +82,14 @@ jobs:
       - name: Publish Framework-dependent package
         run: |
           dotnet publish ./src/StarmyKnife/StarmyKnife.csproj `
-            /p:PublishProfile=Properties\PublishProfiles\net80.pubxml `
+            --configuration Release `
             --runtime win-x64 `
-            --no-build
+            --self-contained false `
+            -p:PublishSingleFile=true `
+            -p:PublishReadyToRun=false `
+            -p:PublishTrimmed=false `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -o .\src\StarmyKnife\bin\Release\net8.0-windows\publish\StarmyKnife-x.x.x.x
 
       - name: Create ZIP (Framework-dependent package)
         run: |
